@@ -17,6 +17,7 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 @interface UIGestureRecognizer (UIView_Gestures)
 
 @property (nonatomic) SwipeGestureRecognizerInfo* swipeInfo;
+@property (nonatomic) TapGestureRecognizerInfo* tapInfo;
 
 @end
 
@@ -34,19 +35,35 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     return (SwipeGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
 }
 
+
+
+@dynamic tapInfo;
+
+- (void)setTapInfo:(TapGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (TapGestureRecognizerInfo *)tapInfo
+{
+    return (TapGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
+
 @end
 
 @interface UIView(UIView_Gestures_Internal)
 
-- (void)handleGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+- (void)handleSwipeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 
+- (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 @end
 
 @implementation UIView (UIView_Gestures)
 
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>)SwipeGestureRecognizerInfos
 {
-    for ( std::vector<SwipeGestureRecognizerInfo*>::iterator it = SwipeGestureRecognizerInfos.begin(); it != SwipeGestureRecognizerInfos.end(); ++it )
+    for ( auto it = SwipeGestureRecognizerInfos.begin(); it != SwipeGestureRecognizerInfos.end(); ++it )
     {
         UISwipeGestureRecognizerDirection direction = 0;
         
@@ -55,7 +72,7 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
         if( (*it)->getUp() ){ direction   |= UISwipeGestureRecognizerDirectionUp; }
         if( (*it)->getDown() ){ direction   |= UISwipeGestureRecognizerDirectionDown; }
         
-        UISwipeGestureRecognizer *gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureRecognizer:)];
+        UISwipeGestureRecognizer *gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureRecognizer:)];
         
         [gestureRecognizer setSwipeInfo:*it];
         [gestureRecognizer setDirection:direction];
@@ -66,13 +83,36 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     }
 }
 
+- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo :(TapGestureRecognizerInfo*)doubleTapInfo {
+
+    UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+    [singleTapRecognizer setTapInfo:singleTapInfo];
+    [singleTapRecognizer setNumberOfTapsRequired:1];
+    [self addGestureRecognizer:singleTapRecognizer];
+    
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+    [doubleTapRecognizer setTapInfo:doubleTapInfo];
+    [doubleTapRecognizer setNumberOfTapsRequired:2];
+    [self addGestureRecognizer:doubleTapRecognizer];
+    
+    [singleTapRecognizer requireGestureRecognizerToFail : doubleTapRecognizer];
+    
+    [singleTapRecognizer release];
+    [doubleTapRecognizer release];
+}
+
 @end
 
 @implementation UIView (UIView_Gestures_Internal)
 
-- (void)handleGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+- (void)handleSwipeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
     gestureRecognizer.swipeInfo->getCallback()();
+}
+
+- (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+{
+    gestureRecognizer.tapInfo->getCallback()();
 }
 
 @end

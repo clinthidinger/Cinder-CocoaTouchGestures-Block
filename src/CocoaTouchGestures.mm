@@ -20,3 +20,10 @@ void addSwipeGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, 
     [[windowRef->getNativeViewController() view] addSwipeGestures:gestureInfos];
 #endif
 };
+
+void addTapGestures( TapGestureRecognizerInfo* singleTapInfo, TapGestureRecognizerInfo* doubleTapInfo, ci::app::WindowRef windowRef )
+{
+#ifdef __OBJC__
+    [[windowRef->getNativeViewController() view] addTapGestures:singleTapInfo:doubleTapInfo];
+#endif
+};

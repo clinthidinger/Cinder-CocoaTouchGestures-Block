@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 eight_io. All rights reserved.
 //
 
-#ifndef UIView_SwipeGestureRecognizerInfo_h
-#define UIView_SwipeGestureRecognizerInfo_h
+#ifndef UIView_TapGestureRecognizerInfo_h
+#define UIView_TapGestureRecognizerInfo_h
 
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -22,52 +22,22 @@ class TapGestureRecognizerInfo
     
 public:
     
-    TapGestureRecognizerInfo( GestureRecognizerCallBack callback_, bool right_ = false, bool left_ = false, bool up_ = false, bool down_ = false )
+    TapGestureRecognizerInfo( GestureRecognizerCallBack callback_)
     
-    :callback( callback_ )
-    ,right( right_ )
-    ,left( left_ )
-    ,up( up_ )
-    ,down( down_ )
-    
-    {};
+    :callback( callback_ )   {};
     
     TapGestureRecognizerInfo()
     {};
     
-    TapGestureRecognizerInfo & getCallback()
+    GestureRecognizerCallBack & getCallback()
     {
         return callback;
     };
-    
-    bool getRight()
-    {
-        return right;
-    };
-    
-    bool getLeft()
-    {
-        return left;
-    };
-    
-    bool getUp()
-    {
-        return up;
-    };
-    
-    bool getDown()
-    {
-        return down;
-    };
+
     
 private:
     
     GestureRecognizerCallBack   callback;
-    
-    bool    right;
-    bool    left;
-    bool    up;
-    bool    down;
     
 };
 

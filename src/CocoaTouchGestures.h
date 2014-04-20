@@ -13,11 +13,12 @@
 
 #include "cinder/app/Window.h"
 
-#include "SwipeGestureRecognizerInfo.h"
 #include "TapGestureRecognizerInfo.h"
+#include "SwipeGestureRecognizerInfo.h"
+
 
 void addSwipeGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
 
-void addTapGesture( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
+void addTapGestures(TapGestureRecognizerInfo* singleTapInfo, TapGestureRecognizerInfo* doubleTapInfo, ci::app::WindowRef windowRef );
 
 #endif

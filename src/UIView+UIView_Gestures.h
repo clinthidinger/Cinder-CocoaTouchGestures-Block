@@ -17,5 +17,5 @@
 
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>)gestureRecognizerInfos;
 
-- (void)addTapGestures:(std::vector<SwipeGestureRecognizerInfo*>)gestureRecognizerInfos;
+- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo : (TapGestureRecognizerInfo*)doubleTapInfo;
 @end
