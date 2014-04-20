@@ -14,7 +14,10 @@
 #include "cinder/app/Window.h"
 
 #include "SwipeGestureRecognizerInfo.h"
+#include "TapGestureRecognizerInfo.h"
 
-void addGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
+void addSwipeGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
+
+void addTapGesture( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
 
 #endif

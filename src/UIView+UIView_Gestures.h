@@ -11,9 +11,11 @@
 #include <vector>
 
 #include "SwipeGestureRecognizerInfo.h"
+#include "TapGestureRecognizerInfo.h"
 
 @interface UIView (UIView_Gestures)
 
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>)gestureRecognizerInfos;
 
+- (void)addTapGestures:(std::vector<SwipeGestureRecognizerInfo*>)gestureRecognizerInfos;
 @end

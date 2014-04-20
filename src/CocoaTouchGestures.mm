@@ -14,7 +14,7 @@
 
 #endif
 
-void addGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef )
+void addSwipeGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef )
 {
 #ifdef __OBJC__
     [[windowRef->getNativeViewController() view] addSwipeGestures:gestureInfos];
