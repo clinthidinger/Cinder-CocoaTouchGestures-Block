@@ -67,10 +67,10 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     {
         UISwipeGestureRecognizerDirection direction = 0;
         
-        if( (*it)->getRight() ){ direction   |= UISwipeGestureRecognizerDirectionRight; }
-        if( (*it)->getLeft() ){ direction   |= UISwipeGestureRecognizerDirectionLeft; }
-        if( (*it)->getUp() ){ direction   |= UISwipeGestureRecognizerDirectionUp; }
-        if( (*it)->getDown() ){ direction   |= UISwipeGestureRecognizerDirectionDown; }
+        if ( (*it)->getRight() ) { direction   |= UISwipeGestureRecognizerDirectionRight; }
+        if ( (*it)->getLeft() ) { direction   |= UISwipeGestureRecognizerDirectionLeft; }
+        if ( (*it)->getUp() ) { direction   |= UISwipeGestureRecognizerDirectionUp; }
+        if ( (*it)->getDown() ) { direction   |= UISwipeGestureRecognizerDirectionDown; }
         
         UISwipeGestureRecognizer *gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureRecognizer:)];
         
@@ -90,7 +90,7 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     [singleTapRecognizer setNumberOfTapsRequired:1];
     [self addGestureRecognizer:singleTapRecognizer];
     
-    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action:@selector(handleTapGestureRecognizer:)];
     [doubleTapRecognizer setTapInfo:doubleTapInfo];
     [doubleTapRecognizer setNumberOfTapsRequired:2];
     [self addGestureRecognizer:doubleTapRecognizer];
@@ -112,6 +112,8 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
 - (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
+    CGPoint pointInView = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.tapInfo->setTapLocation(pointInView.x, pointInView.y);
     gestureRecognizer.tapInfo->getCallback()();
 }
 

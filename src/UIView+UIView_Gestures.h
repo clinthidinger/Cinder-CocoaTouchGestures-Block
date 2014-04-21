@@ -15,7 +15,7 @@
 
 @interface UIView (UIView_Gestures)
 
-- (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>)gestureRecognizerInfos;
+- (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>) gestureRecognizerInfos;
 
 - (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo : (TapGestureRecognizerInfo*)doubleTapInfo;
 @end

@@ -15,29 +15,30 @@
 
 class TapGestureRecognizerInfo;
 
-typedef boost::function<void()> GestureRecognizerCallBack;
+typedef boost::function<void ()> TapGestureRecognizerCallBack;
 
-class TapGestureRecognizerInfo
-{
+class TapGestureRecognizerInfo {
     
 public:
+    TapGestureRecognizerInfo( TapGestureRecognizerCallBack callback) : callback( callback )   {};
     
-    TapGestureRecognizerInfo( GestureRecognizerCallBack callback_)
+    TapGestureRecognizerInfo() {};
     
-    :callback( callback_ )   {};
-    
-    TapGestureRecognizerInfo()
-    {};
-    
-    GestureRecognizerCallBack & getCallback()
-    {
+    TapGestureRecognizerCallBack & getCallback() {
         return callback;
     };
-
     
+    void setTapLocation(float x, float y){
+        this->x = x;
+        this->y = y;
+    }
+    
+    float x, y;
+
 private:
     
-    GestureRecognizerCallBack   callback;
+    TapGestureRecognizerCallBack   callback;
+
     
 };
 
