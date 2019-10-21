@@ -6,19 +6,31 @@
 //
 //
 
-#ifndef Gesture_CocoaTouchGestures_h
-#define Gesture_CocoaTouchGestures_h
+#pragma once
 
 #include <vector>
 
 #include "cinder/app/Window.h"
 
+#include "PanGestureRecognizerInfo.h"
+#include "PinchGestureRecognizerInfo.h"
+#include "RotationGestureRecognizerInfo.h"
 #include "TapGestureRecognizerInfo.h"
 #include "SwipeGestureRecognizerInfo.h"
 
 
-void addSwipeGestures( std::vector<SwipeGestureRecognizerInfo*> & gestureInfos, ci::app::WindowRef windowRef );
+void addSwipeGestures( const std::vector<SwipeGestureRecognizerInfo*> &gestureInfos,
+                       ci::app::WindowRef windowRef );
 
-void addTapGestures(TapGestureRecognizerInfo* singleTapInfo, TapGestureRecognizerInfo* doubleTapInfo, ci::app::WindowRef windowRef );
+void addTapGestures( TapGestureRecognizerInfo *singleTapInfo,
+                     TapGestureRecognizerInfo *doubleTapInfo,
+                     ci::app::WindowRef windowRef );
 
-#endif
+void addPanGestures( PanGestureRecognizerInfo *panInfo,
+                     ci::app::WindowRef windowRef );
+
+void addPinchGestures( PinchGestureRecognizerInfo *panInfo,
+                       ci::app::WindowRef windowRef );
+
+void addRotationGestures( RotationGestureRecognizerInfo *rotationInfo,
+                        ci::app::WindowRef windowRef );

@@ -6,40 +6,42 @@
 //  Copyright (c) 2014 eight_io. All rights reserved.
 //
 
-#ifndef UIView_TapGestureRecognizerInfo_h
-#define UIView_TapGestureRecognizerInfo_h
+#pragma once
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
 #include <functional>
 
-class TapGestureRecognizerInfo;
+using TapGestureRecognizerCallBack = std::function<void()>;
 
-typedef boost::function<void ()> TapGestureRecognizerCallBack;
-
-class TapGestureRecognizerInfo {
-    
+class TapGestureRecognizerInfo
+{
 public:
-    TapGestureRecognizerInfo( TapGestureRecognizerCallBack callback) : callback( callback )   {};
-    
-    TapGestureRecognizerInfo() {};
-    
-    TapGestureRecognizerCallBack & getCallback() {
-        return callback;
-    };
-    
-    void setTapLocation(float x, float y){
-        this->x = x;
-        this->y = y;
+    TapGestureRecognizerInfo( TapGestureRecognizerCallBack callback )
+        : callback( callback )
+    {
+        
     }
     
-    float x, y;
+//    TapGestureRecognizerInfo()
+//    {
+//        
+//    }
+    
+    TapGestureRecognizerCallBack & getCallback()
+    {
+        return callback;
+    }
+    
+    void setTapLocation( float x, float y )
+    {
+        mTouchLocation = ci::vec2( x, y );
+    }
+    
+    const ci::vec2 &getTouchLocation() const { return mTouchLocation; }
+    
+    float x{ 0.0f };
+    float y{ 0.0f };
 
 private:
-    
-    TapGestureRecognizerCallBack   callback;
-
-    
+    ci::vec2 mTouchLocation{ 0.0f };
+    TapGestureRecognizerCallBack callback;
 };
-
-#endif

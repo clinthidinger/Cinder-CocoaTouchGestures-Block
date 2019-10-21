@@ -6,69 +6,60 @@
 //  Copyright (c) 2013 Ali Nakipoğlu. All rights reserved.
 //
 
-#ifndef UIView_SwipeGestureRecognizerInfo_h
-#define UIView_SwipeGestureRecognizerInfo_h
-
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#pragma once
 #include <functional>
 
-class SwipeGestureRecognizerInfo;
-
-typedef boost::function<void()> GestureRecognizerCallBack;
+using GestureRecognizerCallBack = std::function<void()>;
 
 class SwipeGestureRecognizerInfo
 {
-    
 public:
+    SwipeGestureRecognizerInfo( const GestureRecognizerCallBack &callback_,
+                                bool right_ = false,
+                                bool left_ = false,
+                                bool up_ = false,
+                                bool down_ = false )
+    : callback( callback_ )
+    , right( right_ )
+    , left( left_ )
+    , up( up_ )
+    , down( down_ )
+    {
+        
+    }
     
-    SwipeGestureRecognizerInfo( GestureRecognizerCallBack callback_, bool right_ = false, bool left_ = false, bool up_ = false, bool down_ = false )
+    //~SwipeGestureRecognizerInfo() = default;
     
-    :callback( callback_ )
-    ,right( right_ )
-    ,left( left_ )
-    ,up( up_ )
-    ,down( down_ )
-    
-    {};
-    
-    ~SwipeGestureRecognizerInfo()
-    {};
-    
-    GestureRecognizerCallBack & getCallback()
+    GestureRecognizerCallBack &getCallback()
     {
         return callback;
-    };
+    }
     
     bool getRight()
     {
         return right;
-    };
+    }
     
     bool getLeft()
     {
         return left;
-    };
+    }
     
     bool getUp()
     {
         return up;
-    };
+    }
     
     bool getDown()
     {
         return down;
-    };
+    }
     
 private:
+    GestureRecognizerCallBack callback;
     
-    GestureRecognizerCallBack   callback;
-    
-    bool    right;
-    bool    left;
-    bool    up;
-    bool    down;
-    
+    bool right{ false };
+    bool left{ false };
+    bool up{ false };
+    bool down{ false };
 };
-
-#endif

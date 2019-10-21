@@ -52,6 +52,10 @@
 		C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		ED97ADDA71ED4C27A652E1CF /* GestureApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GestureApp.cpp; path = ../src/GestureApp.cpp; sourceTree = "<group>"; };
+		F47EFCFC235E6518004ABD1E /* RotationGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RotationGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		F492A9E023535E8B004E078D /* TapGestureRecognizerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		F492A9E123536CD6004E078D /* PanGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		F492A9E223536CEA004E078D /* PinchGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PinchGestureRecognizerInfo.h; sourceTree = "<group>"; };
 		FD67F2ACAEFE4C8EBBD533CB /* Gesture_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Gesture_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,11 +152,15 @@
 		411062D71736D27700FA4438 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F492A9E023535E8B004E078D /* TapGestureRecognizerInfo.h */,
 				411062D81736D27700FA4438 /* CocoaTouchGestures.h */,
 				411062D91736D27700FA4438 /* CocoaTouchGestures.mm */,
 				411062DA1736D27700FA4438 /* SwipeGestureRecognizerInfo.h */,
 				411062DB1736D27700FA4438 /* UIView+UIView_Gestures.h */,
 				411062DC1736D27700FA4438 /* UIView+UIView_Gestures.mm */,
+				F492A9E123536CD6004E078D /* PanGestureRecognizerInfo.h */,
+				F492A9E223536CEA004E078D /* PinchGestureRecognizerInfo.h */,
+				F47EFCFC235E6518004ABD1E /* RotationGestureRecognizerInfo.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -199,11 +207,19 @@
 /* Begin PBXProject section */
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				TargetAttributes = {
+					00692BCE14FF149000D0A05E = {
+						DevelopmentTeam = CTUD689243;
+					};
+				};
+			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "Gesture" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 00692BC414FF149000D0A05E;
@@ -303,18 +319,30 @@
 		00692BF614FF149000D0A05E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = ../../../../../;
+				ARCHS = "$(ARCHS_STANDARD)";
+				CINDER_PATH = ../../../../../Cinder;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				DEVELOPMENT_TEAM = CTUD689243;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Gesture_Prefix.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include/boost\"",
+					"\"$CINDER_PATH)/include $(CINDER_PATH)/include/boost/filesystem",
+				);
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I$(CINDER_PATH)/include",
+				);
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
-					"\"$(CINDER_PATH)/lib/libcinder-iphone_d.a\"",
+					"\"$(CINDER_PATH)/lib/ios/Debug/libcinder.a\"",
 					"-lz",
 				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
-					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
-					"-lz",
-				);
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=*]" = org.kibcinder.Gesture;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -323,19 +351,31 @@
 		00692BF714FF149000D0A05E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = ../../../../../;
+				ARCHS = "$(ARCHS_STANDARD)";
+				CINDER_PATH = ../../../../../Cinder;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				DEVELOPMENT_TEAM = CTUD689243;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Gesture_Prefix.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include/boost\"",
+					"\"$CINDER_PATH)/include $(CINDER_PATH)/include/boost/filesystem",
+				);
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I$(CINDER_PATH)/include",
+				);
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
-					"\"$(CINDER_PATH)/lib/libcinder-iphone.a\"",
+					"\"$(CINDER_PATH)/lib/ios/Release/libcinder.a\"",
 					"-lz",
 					"-ObjC",
 				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
-					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim.a\"",
-					"-lz",
-				);
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=*]" = org.libcinder.Gesture;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

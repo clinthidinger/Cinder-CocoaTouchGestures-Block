@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #include <vector>
-
+#include "PanGestureRecognizerInfo.h"
+#include "PinchGestureRecognizerInfo.h"
+#include "RotationGestureRecognizerInfo.h"
 #include "SwipeGestureRecognizerInfo.h"
 #include "TapGestureRecognizerInfo.h"
 
@@ -18,4 +20,11 @@
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>) gestureRecognizerInfos;
 
 - (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo : (TapGestureRecognizerInfo*)doubleTapInfo;
+
+- (void)addPanGestures:(PanGestureRecognizerInfo*)panInfo;
+
+- (void)addPinchGestures:(PinchGestureRecognizerInfo*)pinchInfo;
+
+- (void)addRotationGestures:(RotationGestureRecognizerInfo*)rotationInfo;
+
 @end

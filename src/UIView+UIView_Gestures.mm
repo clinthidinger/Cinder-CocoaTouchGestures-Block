@@ -7,10 +7,7 @@
 //
 
 #import "UIView+UIView_Gestures.h"
-
 #import <objc/runtime.h>
-
-#include <iostream>
 
 static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
@@ -18,6 +15,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
 @property (nonatomic) SwipeGestureRecognizerInfo* swipeInfo;
 @property (nonatomic) TapGestureRecognizerInfo* tapInfo;
+@property (nonatomic) PanGestureRecognizerInfo* panInfo;
+@property (nonatomic) PinchGestureRecognizerInfo* pinchInfo;
+@property (nonatomic) RotationGestureRecognizerInfo* rotationInfo;
 
 @end
 
@@ -49,6 +49,42 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     return (TapGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
 }
 
+@dynamic panInfo;
+
+- (void)setPanInfo:(PanGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (PanGestureRecognizerInfo *)panInfo
+{
+    return (PanGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
+@dynamic pinchInfo;
+
+- (void)setPinchInfo:(PinchGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (PinchGestureRecognizerInfo *)pinchInfo
+{
+    return (PinchGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
+@dynamic rotationInfo;
+
+- (void)setRotationInfo:(RotationGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (RotationGestureRecognizerInfo *)rotationInfo
+{
+    return (RotationGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
 
 @end
 
@@ -57,24 +93,43 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 - (void)handleSwipeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 
 - (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+
+- (void)handlePanGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+
+- (void)handlePinchGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+
+- (void)handleRotationGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+
 @end
 
 @implementation UIView (UIView_Gestures)
 
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>)SwipeGestureRecognizerInfos
 {
-    for ( auto it = SwipeGestureRecognizerInfos.begin(); it != SwipeGestureRecognizerInfos.end(); ++it )
+    for( auto *rec : SwipeGestureRecognizerInfos )
     {
         UISwipeGestureRecognizerDirection direction = 0;
         
-        if ( (*it)->getRight() ) { direction   |= UISwipeGestureRecognizerDirectionRight; }
-        if ( (*it)->getLeft() ) { direction   |= UISwipeGestureRecognizerDirectionLeft; }
-        if ( (*it)->getUp() ) { direction   |= UISwipeGestureRecognizerDirectionUp; }
-        if ( (*it)->getDown() ) { direction   |= UISwipeGestureRecognizerDirectionDown; }
+        if( rec->getRight() )
+        {
+            direction |= UISwipeGestureRecognizerDirectionRight;
+        }
+        if( rec->getLeft() )
+        {
+            direction |= UISwipeGestureRecognizerDirectionLeft;
+        }
+        if( rec->getUp() )
+        {
+            direction |= UISwipeGestureRecognizerDirectionUp;
+        }
+        if( rec->getDown() )
+        {
+            direction |= UISwipeGestureRecognizerDirectionDown;
+        }
         
         UISwipeGestureRecognizer *gestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureRecognizer:)];
         
-        [gestureRecognizer setSwipeInfo:*it];
+        [gestureRecognizer setSwipeInfo:rec];
         [gestureRecognizer setDirection:direction];
         
         [self addGestureRecognizer:gestureRecognizer];
@@ -83,8 +138,8 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     }
 }
 
-- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo :(TapGestureRecognizerInfo*)doubleTapInfo {
-
+- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo :(TapGestureRecognizerInfo*)doubleTapInfo
+{
     UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
     [singleTapRecognizer setTapInfo:singleTapInfo];
     [singleTapRecognizer setNumberOfTapsRequired:1];
@@ -101,20 +156,75 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     [doubleTapRecognizer release];
 }
 
+- (void)addPinchGestures:(PinchGestureRecognizerInfo*)pinchInfo
+{
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGestureRecognizer:)];
+    [pinchGestureRecognizer setPinchInfo:pinchInfo];
+    [self addGestureRecognizer:pinchGestureRecognizer];
+}
+
+- (void)addPanGestures:(PanGestureRecognizerInfo*)panInfo
+{
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
+    [panGestureRecognizer setPanInfo:panInfo];
+    [self addGestureRecognizer:panGestureRecognizer];
+
+}
+
+- (void)addRotationGestures:(RotationGestureRecognizerInfo*)rotationInfo
+{
+    UIRotationGestureRecognizer *rotateGestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotationGestureRecognizer:)];
+    [rotateGestureRecognizer setRotationInfo:rotationInfo];
+    [self addGestureRecognizer:rotateGestureRecognizer];
+}
+
 @end
 
 @implementation UIView (UIView_Gestures_Internal)
 
-- (void)handleSwipeGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+- (void)handleSwipeGestureRecognizer:(UISwipeGestureRecognizer *)gestureRecognizer
 {
     gestureRecognizer.swipeInfo->getCallback()();
 }
 
-- (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+- (void)handleTapGestureRecognizer:(UITapGestureRecognizer *)gestureRecognizer
 {
     CGPoint pointInView = [gestureRecognizer locationInView:gestureRecognizer.view];
     gestureRecognizer.tapInfo->setTapLocation(pointInView.x, pointInView.y);
     gestureRecognizer.tapInfo->getCallback()();
 }
+
+- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.panInfo->setTapLocation(touchLocation.x, touchLocation.y);
+    gestureRecognizer.panInfo->getCallback()();
+}
+
+- (void)handlePinchGestureRecognizer:(UIPinchGestureRecognizer *)gestureRecognizer
+{
+    //self.transform = CGAffineTransformScale(self.transform, gestureRecognizer.scale, gestureRecognizer.scale);
+    
+    
+    //gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, gestureRecognizer.scale, gestureRecognizer.scale);
+    
+    //float s = gestureRecognizer.scale;
+    
+    //gestureRecognizer.scale = 1.0;
+    
+    
+    gestureRecognizer.pinchInfo->setScale(gestureRecognizer.scale);
+    gestureRecognizer.pinchInfo->getCallback()();
+}
+
+-(void)handleRotationGestureRecognizer:(UIRotationGestureRecognizer *)gestureRecognizer
+{
+    //self.testView.transform = CGAffineTransformRotate(self.testView.transform, gestureRecognizer.rotation);
+ 
+    //gestureRecognizer.rotation = 0.0;
+    gestureRecognizer.rotationInfo->setRotation(gestureRecognizer.rotation);
+    gestureRecognizer.rotationInfo->getCallback()();
+}
+
 
 @end
