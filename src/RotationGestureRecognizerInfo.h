@@ -9,20 +9,20 @@
 
 #include <functional>
 
-using RotationGestureRecognizerCallBack = std::function<void()>;
+using RotationGestureRecognizerCallBack = std::function<void(float, float , float)>;
 
 class RotationGestureRecognizerInfo
 {
 public:
-    RotationGestureRecognizerInfo( const PanGestureRecognizerCallBack &callback )
-        : callback( callback )
+    RotationGestureRecognizerInfo( const RotationGestureRecognizerCallBack &callback )
+        : mCallback( callback )
     {
         
     }
     
     RotationGestureRecognizerCallBack &getCallback()
     {
-        return callback;
+        return mCallback;
     }
 
     float getRotation() const { return mRotation; }
@@ -31,5 +31,5 @@ public:
     
 private:
     float mRotation{ 0.0f };
-    RotationGestureRecognizerCallBack callback;
+    RotationGestureRecognizerCallBack mCallback;
 };

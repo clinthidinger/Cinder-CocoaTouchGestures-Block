@@ -10,13 +10,13 @@
 
 #include <functional>
 
-using TapGestureRecognizerCallBack = std::function<void()>;
+using TapGestureRecognizerCallBack = std::function<void( float x, float y )>;
 
 class TapGestureRecognizerInfo
 {
 public:
-    TapGestureRecognizerInfo( TapGestureRecognizerCallBack callback )
-        : callback( callback )
+    TapGestureRecognizerInfo( const TapGestureRecognizerCallBack &callback )
+        : mCallback( callback )
     {
         
     }
@@ -26,22 +26,19 @@ public:
 //        
 //    }
     
-    TapGestureRecognizerCallBack & getCallback()
+    TapGestureRecognizerCallBack &getCallback()
     {
-        return callback;
+        return mCallback;
     }
     
-    void setTapLocation( float x, float y )
+    void setTouchLocation( float x, float y )
     {
         mTouchLocation = ci::vec2( x, y );
     }
     
     const ci::vec2 &getTouchLocation() const { return mTouchLocation; }
     
-    float x{ 0.0f };
-    float y{ 0.0f };
-
 private:
     ci::vec2 mTouchLocation{ 0.0f };
-    TapGestureRecognizerCallBack callback;
+    TapGestureRecognizerCallBack mCallback;
 };

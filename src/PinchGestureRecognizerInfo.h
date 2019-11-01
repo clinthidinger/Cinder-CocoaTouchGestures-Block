@@ -9,20 +9,20 @@
 
 #include <functional>
 
-using PinchGestureRecognizerCallBack = std::function<void()>;
+using PinchGestureRecognizerCallBack = std::function<void(float, float, float)>;
 
 class PinchGestureRecognizerInfo
 {
 public:
-    PinchGestureRecognizerInfo( const PanGestureRecognizerCallBack &callback )
-        : callback( callback )
+    PinchGestureRecognizerInfo( const PinchGestureRecognizerCallBack &callback )
+        : mCallback( callback )
     {
         
     }
     
     PinchGestureRecognizerCallBack &getCallback()
     {
-        return callback;
+        return mCallback;
     }
 
     float getScale() const { return mScale; }
@@ -31,5 +31,5 @@ public:
     
 private:
     float mScale{ 1.0f };
-    PinchGestureRecognizerCallBack callback;
+    PinchGestureRecognizerCallBack mCallback;
 };

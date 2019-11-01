@@ -1,26 +1,26 @@
 //
-//  PanGestureRecognizerInfo.h
+//  LongPressGestureRecognizerInfo.h
 //  Gesture
 //
-//  Created by clint hidinger on 10/13/19.
+//  Created by clint hidinger on 10/31/19.
 //
 
 #pragma once
 
 #include <functional>
 
-using PanGestureRecognizerCallBack = std::function<void( float x, float y )>;
+using LongPressGestureRecognizerCallBack = std::function<void( float, float )>;
 
-class PanGestureRecognizerInfo
+class LongPressGestureRecognizerInfo
 {
 public:
-    PanGestureRecognizerInfo( const PanGestureRecognizerCallBack &callback )
+    LongPressGestureRecognizerInfo( const LongPressGestureRecognizerCallBack &callback )
         : mCallback( callback )
     {
         
     }
     
-    PanGestureRecognizerCallBack &getCallback()
+    LongPressGestureRecognizerCallBack &getCallback()
     {
         return mCallback;
     }
@@ -33,6 +33,6 @@ public:
     const ci::vec2 &getTouchLocation() const { return mTouchLocation; }
         
 private:
-    PanGestureRecognizerCallBack mCallback;
+    LongPressGestureRecognizerCallBack mCallback;
     ci::vec2 mTouchLocation{ 0.0f };
 };

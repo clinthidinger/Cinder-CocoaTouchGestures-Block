@@ -53,6 +53,8 @@
 		DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		ED97ADDA71ED4C27A652E1CF /* GestureApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GestureApp.cpp; path = ../src/GestureApp.cpp; sourceTree = "<group>"; };
 		F47EFCFC235E6518004ABD1E /* RotationGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RotationGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		F47EFCFD236BC20E004ABD1E /* ScreenEdgePanGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenEdgePanGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		F47EFCFE236BC22D004ABD1E /* LongPressGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LongPressGestureRecognizerInfo.h; sourceTree = "<group>"; };
 		F492A9E023535E8B004E078D /* TapGestureRecognizerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapGestureRecognizerInfo.h; sourceTree = "<group>"; };
 		F492A9E123536CD6004E078D /* PanGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanGestureRecognizerInfo.h; sourceTree = "<group>"; };
 		F492A9E223536CEA004E078D /* PinchGestureRecognizerInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PinchGestureRecognizerInfo.h; sourceTree = "<group>"; };
@@ -161,6 +163,8 @@
 				F492A9E123536CD6004E078D /* PanGestureRecognizerInfo.h */,
 				F492A9E223536CEA004E078D /* PinchGestureRecognizerInfo.h */,
 				F47EFCFC235E6518004ABD1E /* RotationGestureRecognizerInfo.h */,
+				F47EFCFD236BC20E004ABD1E /* ScreenEdgePanGestureRecognizerInfo.h */,
+				F47EFCFE236BC22D004ABD1E /* LongPressGestureRecognizerInfo.h */,
 			);
 			path = src;
 			sourceTree = "<group>";

@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 
 #include <vector>
+#include "LongPressGestureRecognizerInfo.h"
 #include "PanGestureRecognizerInfo.h"
 #include "PinchGestureRecognizerInfo.h"
 #include "RotationGestureRecognizerInfo.h"
+#include "ScreenEdgePanGestureRecognizerInfo.h"
 #include "SwipeGestureRecognizerInfo.h"
 #include "TapGestureRecognizerInfo.h"
 
@@ -19,12 +21,36 @@
 
 - (void)addSwipeGestures:(std::vector<SwipeGestureRecognizerInfo*>) gestureRecognizerInfos;
 
-- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo : (TapGestureRecognizerInfo*)doubleTapInfo;
+- (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo:(TapGestureRecognizerInfo*)doubleTapInfo;
 
-- (void)addPanGestures:(PanGestureRecognizerInfo*)panInfo;
+- (void)addPanGesture:(PanGestureRecognizerInfo*)panInfo;
 
-- (void)addPinchGestures:(PinchGestureRecognizerInfo*)pinchInfo;
+- (void)addPinchGesture:(PinchGestureRecognizerInfo*)pinchInfo;
 
-- (void)addRotationGestures:(RotationGestureRecognizerInfo*)rotationInfo;
+- (void)addRotationGesture:(RotationGestureRecognizerInfo*)rotationInfo;
+
+- (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanGestureInfo;
+
+- (void)addLongPressGesture:(LongPressGestureRecognizerInfo*)longPressGestureInfo;
+
+
+// https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/coordinating_multiple_gesture_recognizers/preferring_one_gesture_over_another
+
+
+- (void)removeSwipeGesture;
+
+- (void)removeTapGestures;
+
+- (void)removePanGestures;
+
+- (void)removePinchGestures;
+
+- (void)removeRotationGestures;
+
+- (void)removeScreenEdgePanGesture;
+
+- (void)removeLongPressGesture;
+
+- (void)removeAllGestures;
 
 @end

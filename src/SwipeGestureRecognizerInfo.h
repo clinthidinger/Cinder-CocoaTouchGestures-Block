@@ -9,21 +9,21 @@
 #pragma once
 #include <functional>
 
-using GestureRecognizerCallBack = std::function<void()>;
+using GestureRecognizerCallBack = std::function<void( float, float )>;
 
 class SwipeGestureRecognizerInfo
 {
 public:
-    SwipeGestureRecognizerInfo( const GestureRecognizerCallBack &callback_,
-                                bool right_ = false,
-                                bool left_ = false,
-                                bool up_ = false,
-                                bool down_ = false )
-    : callback( callback_ )
-    , right( right_ )
-    , left( left_ )
-    , up( up_ )
-    , down( down_ )
+    SwipeGestureRecognizerInfo( const GestureRecognizerCallBack &callback,
+                                bool right = false,
+                                bool left = false,
+                                bool up = false,
+                                bool down = false )
+    : mCallback( callback )
+    , mRight( right )
+    , mLeft( left )
+    , mUp( up )
+    , mDown( down )
     {
         
     }
@@ -32,34 +32,34 @@ public:
     
     GestureRecognizerCallBack &getCallback()
     {
-        return callback;
+        return mCallback;
     }
     
     bool getRight()
     {
-        return right;
+        return mRight;
     }
     
     bool getLeft()
     {
-        return left;
+        return mLeft;
     }
     
     bool getUp()
     {
-        return up;
+        return mUp;
     }
     
     bool getDown()
     {
-        return down;
+        return mDown;
     }
     
 private:
-    GestureRecognizerCallBack callback;
+    GestureRecognizerCallBack mCallback;
     
-    bool right{ false };
-    bool left{ false };
-    bool up{ false };
-    bool down{ false };
+    bool mRight{ false };
+    bool mLeft{ false };
+    bool mUp{ false };
+    bool mDown{ false };
 };

@@ -15,9 +15,11 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
 @property (nonatomic) SwipeGestureRecognizerInfo* swipeInfo;
 @property (nonatomic) TapGestureRecognizerInfo* tapInfo;
+@property (nonatomic) LongPressGestureRecognizerInfo* longPressInfo;
 @property (nonatomic) PanGestureRecognizerInfo* panInfo;
 @property (nonatomic) PinchGestureRecognizerInfo* pinchInfo;
 @property (nonatomic) RotationGestureRecognizerInfo* rotationInfo;
+@property (nonatomic) ScreenEdgePanGestureRecognizerInfo* screenEdgePanInfo;
 
 @end
 
@@ -35,8 +37,6 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     return (SwipeGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
 }
 
-
-
 @dynamic tapInfo;
 
 - (void)setTapInfo:(TapGestureRecognizerInfo *)info
@@ -48,6 +48,19 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 {
     return (TapGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
 }
+
+@dynamic longPressInfo;
+
+- (void)setLongPressInfo:(LongPressGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (LongPressGestureRecognizerInfo *)longPressInfo
+{
+    return (LongPressGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
 
 @dynamic panInfo;
 
@@ -83,6 +96,18 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 - (RotationGestureRecognizerInfo *)rotationInfo
 {
     return (RotationGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
+}
+
+@dynamic screenEdgePanInfo;
+
+- (void)setScreenEdgePanInfo:(ScreenEdgePanGestureRecognizerInfo *)info
+{
+    objc_setAssociatedObject(self, GESTUREINFOKEY, [NSValue valueWithPointer:info], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (ScreenEdgePanGestureRecognizerInfo *)screenEdgePanInfo
+{
+    return (ScreenEdgePanGestureRecognizerInfo *)[(NSValue *)objc_getAssociatedObject(self, GESTUREINFOKEY) pointerValue];
 }
 
 
@@ -140,42 +165,154 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
 - (void)addTapGestures:(TapGestureRecognizerInfo*)singleTapInfo :(TapGestureRecognizerInfo*)doubleTapInfo
 {
-    UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
-    [singleTapRecognizer setTapInfo:singleTapInfo];
-    [singleTapRecognizer setNumberOfTapsRequired:1];
-    [self addGestureRecognizer:singleTapRecognizer];
+    UITapGestureRecognizer *singleTapRecognizer = nil;
+    if( singleTapInfo != nil )
+    {
+        singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+        [singleTapRecognizer setTapInfo:singleTapInfo];
+        [singleTapRecognizer setNumberOfTapsRequired:1];
+        [self addGestureRecognizer:singleTapRecognizer];
+    }
     
-    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action:@selector(handleTapGestureRecognizer:)];
-    [doubleTapRecognizer setTapInfo:doubleTapInfo];
-    [doubleTapRecognizer setNumberOfTapsRequired:2];
-    [self addGestureRecognizer:doubleTapRecognizer];
+    UITapGestureRecognizer *doubleTapRecognizer = nil;
+    if( doubleTapInfo != nil )
+    {
+        doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action:@selector(handleTapGestureRecognizer:)];
+        [doubleTapRecognizer setTapInfo:doubleTapInfo];
+        [doubleTapRecognizer setNumberOfTapsRequired:2];
+        [self addGestureRecognizer:doubleTapRecognizer];
+    }
     
-    [singleTapRecognizer requireGestureRecognizerToFail : doubleTapRecognizer];
+    if( ( singleTapRecognizer != nil ) && ( doubleTapRecognizer != nil ) )
+    {
+        [singleTapRecognizer requireGestureRecognizerToFail : doubleTapRecognizer]; // Allow both gestures to exist.
+    }
     
-    [singleTapRecognizer release];
-    [doubleTapRecognizer release];
+    if( singleTapRecognizer != nil )
+    {
+        [singleTapRecognizer release];
+    }
+    if( doubleTapRecognizer != nil )
+    {
+        [doubleTapRecognizer release];
+    }
 }
 
-- (void)addPinchGestures:(PinchGestureRecognizerInfo*)pinchInfo
+- (void)addLongPressGesture:(LongPressGestureRecognizerInfo*)longPressInfo
+{
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestureRecognizer:)];
+    [longPressGestureRecognizer setLongPressInfo:longPressInfo];
+    [self addGestureRecognizer:longPressGestureRecognizer];
+    
+    [longPressGestureRecognizer release];
+}
+
+
+- (void)addPinchGesture:(PinchGestureRecognizerInfo*)pinchInfo
 {
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGestureRecognizer:)];
     [pinchGestureRecognizer setPinchInfo:pinchInfo];
     [self addGestureRecognizer:pinchGestureRecognizer];
+    
+    [pinchGestureRecognizer release];
 }
 
-- (void)addPanGestures:(PanGestureRecognizerInfo*)panInfo
+- (void)addPanGesture:(PanGestureRecognizerInfo*)panInfo
 {
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [panGestureRecognizer setPanInfo:panInfo];
     [self addGestureRecognizer:panGestureRecognizer];
-
+    
+    [panGestureRecognizer release];
 }
 
-- (void)addRotationGestures:(RotationGestureRecognizerInfo*)rotationInfo
+- (void)addRotationGesture:(RotationGestureRecognizerInfo*)rotationInfo
 {
     UIRotationGestureRecognizer *rotateGestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotationGestureRecognizer:)];
     [rotateGestureRecognizer setRotationInfo:rotationInfo];
     [self addGestureRecognizer:rotateGestureRecognizer];
+    
+    [rotateGestureRecognizer release];
+}
+
+- (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo
+{
+    UIScreenEdgePanGestureRecognizer *screenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(handleScreenEdgePanGestureRecognizer:)];
+    [screenEdgePanGestureRecognizer setScreenEdgePanInfo:screenEdgePanInfo];
+    [self addGestureRecognizer:screenEdgePanGestureRecognizer];
+    
+    [screenEdgePanGestureRecognizer release];
+}
+
+- (void)removeSwipeGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UISwipeGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removeTapGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removePanGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removePinchGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UIPinchGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removeRotationGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UIRotationGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removeScreenEdgePanGesture
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removeLongPressGesture
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+        [self removeGestureRecognizer:recognizer];
+      }
+    }
+}
+
+- (void)removeAllGestures
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers)
+    {
+        [self removeGestureRecognizer:recognizer];
+    }
 }
 
 @end
@@ -184,21 +321,29 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 
 - (void)handleSwipeGestureRecognizer:(UISwipeGestureRecognizer *)gestureRecognizer
 {
-    gestureRecognizer.swipeInfo->getCallback()();
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.swipeInfo->getCallback()(touchLocation.x, touchLocation.y);
 }
 
 - (void)handleTapGestureRecognizer:(UITapGestureRecognizer *)gestureRecognizer
 {
-    CGPoint pointInView = [gestureRecognizer locationInView:gestureRecognizer.view];
-    gestureRecognizer.tapInfo->setTapLocation(pointInView.x, pointInView.y);
-    gestureRecognizer.tapInfo->getCallback()();
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.tapInfo->setTouchLocation(touchLocation.x, touchLocation.y);
+    gestureRecognizer.tapInfo->getCallback()(touchLocation.x, touchLocation.y);
+}
+
+- (void)handleLongPressGestureRecognizer:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.longPressInfo->setTouchLocation(touchLocation.x, touchLocation.y);
+    gestureRecognizer.longPressInfo->getCallback()(touchLocation.x, touchLocation.y);
 }
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer
 {
     CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
-    gestureRecognizer.panInfo->setTapLocation(touchLocation.x, touchLocation.y);
-    gestureRecognizer.panInfo->getCallback()();
+    gestureRecognizer.panInfo->setTouchLocation(touchLocation.x, touchLocation.y);
+    gestureRecognizer.panInfo->getCallback()(touchLocation.x, touchLocation.y);
 }
 
 - (void)handlePinchGestureRecognizer:(UIPinchGestureRecognizer *)gestureRecognizer
@@ -212,9 +357,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     
     //gestureRecognizer.scale = 1.0;
     
-    
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
     gestureRecognizer.pinchInfo->setScale(gestureRecognizer.scale);
-    gestureRecognizer.pinchInfo->getCallback()();
+    gestureRecognizer.pinchInfo->getCallback()(touchLocation.x, touchLocation.y, gestureRecognizer.scale);
 }
 
 -(void)handleRotationGestureRecognizer:(UIRotationGestureRecognizer *)gestureRecognizer
@@ -222,8 +367,16 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     //self.testView.transform = CGAffineTransformRotate(self.testView.transform, gestureRecognizer.rotation);
  
     //gestureRecognizer.rotation = 0.0;
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
     gestureRecognizer.rotationInfo->setRotation(gestureRecognizer.rotation);
-    gestureRecognizer.rotationInfo->getCallback()();
+    gestureRecognizer.rotationInfo->getCallback()(touchLocation.x, touchLocation.y, gestureRecognizer.rotation);
+}
+
+- (void)handleScreenEdgePanGestureRecognizer:(UIScreenEdgePanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+    gestureRecognizer.panInfo->setTouchLocation(touchLocation.x, touchLocation.y);
+    gestureRecognizer.panInfo->getCallback()(touchLocation.x, touchLocation.y);
 }
 
 
