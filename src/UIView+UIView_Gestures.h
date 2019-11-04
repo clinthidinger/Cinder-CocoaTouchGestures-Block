@@ -29,13 +29,17 @@
 
 - (void)addRotationGesture:(RotationGestureRecognizerInfo*)rotationInfo;
 
-- (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanGestureInfo;
+- (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo;
 
-- (void)addLongPressGesture:(LongPressGestureRecognizerInfo*)longPressGestureInfo;
+- (void)addScreenEdgePanAndPanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo:
+                                      (PanGestureRecognizerInfo*)panInfo;
+
+- (void)addLongPressGesture:(LongPressGestureRecognizerInfo*)longPressInfo;
 
 
 // https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/coordinating_multiple_gesture_recognizers/preferring_one_gesture_over_another
 
+-(void)enableSwipegeGestures:(bool)state;
 
 - (void)removeSwipeGesture;
 

@@ -38,7 +38,13 @@ void addPinchGestures( PinchGestureRecognizerInfo *panInfo,
                        ci::app::WindowRef windowRef );
 
 void addRotationGestures( RotationGestureRecognizerInfo *rotationInfo,
-                        ci::app::WindowRef windowRef );
+                          ci::app::WindowRef windowRef );
 
 void addScreenEdgePanGestures( ScreenEdgePanGestureRecognizerInfo *sepanInfo,
                                ci::app::WindowRef windowRef );
+
+void addScreenEdgePanAndPanGestures( ScreenEdgePanGestureRecognizerInfo *sepanInfo,
+                                     PanGestureRecognizerInfo *panInfo,
+                                     ci::app::WindowRef windowRef );
+
+void removeAllGestures( ci::app::WindowRef windowRef );

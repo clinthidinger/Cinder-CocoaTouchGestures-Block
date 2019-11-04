@@ -30,30 +30,15 @@ public:
     
     //~SwipeGestureRecognizerInfo() = default;
     
-    GestureRecognizerCallBack &getCallback()
-    {
-        return mCallback;
-    }
+    GestureRecognizerCallBack &getCallback() { return mCallback; }
     
-    bool getRight()
-    {
-        return mRight;
-    }
+    bool getRight() const { return mRight; }
     
-    bool getLeft()
-    {
-        return mLeft;
-    }
+    bool getLeft() const { return mLeft; }
     
-    bool getUp()
-    {
-        return mUp;
-    }
+    bool getUp() const { return mUp; }
     
-    bool getDown()
-    {
-        return mDown;
-    }
+    bool getDown() const { return mDown; }
     
 private:
     GestureRecognizerCallBack mCallback;

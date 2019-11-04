@@ -238,10 +238,39 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
 - (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo
 {
     UIScreenEdgePanGestureRecognizer *screenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(handleScreenEdgePanGestureRecognizer:)];
+    screenEdgePanGestureRecognizer.edges = UIRectEdgeLeft;
     [screenEdgePanGestureRecognizer setScreenEdgePanInfo:screenEdgePanInfo];
     [self addGestureRecognizer:screenEdgePanGestureRecognizer];
     
     [screenEdgePanGestureRecognizer release];
+}
+
+- (void)addScreenEdgePanAndPanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo:
+(PanGestureRecognizerInfo*)panInfo
+{
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
+    [panGestureRecognizer setPanInfo:panInfo];
+    [self addGestureRecognizer:panGestureRecognizer];
+    
+    
+    UIScreenEdgePanGestureRecognizer *screenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(handleScreenEdgePanGestureRecognizer:)];
+    screenEdgePanGestureRecognizer.edges = UIRectEdgeLeft;// UIRectEdgeRight;
+    [screenEdgePanGestureRecognizer setScreenEdgePanInfo:screenEdgePanInfo];
+    [self addGestureRecognizer:screenEdgePanGestureRecognizer];
+    
+    [panGestureRecognizer requireGestureRecognizerToFail : screenEdgePanGestureRecognizer];
+    
+    [screenEdgePanGestureRecognizer release];
+    [panGestureRecognizer release];
+}
+
+-(void)enableSwipegeGestures:(bool)state
+{
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+      if([recognizer isKindOfClass:[UISwipeGestureRecognizer class]]) {
+        recognizer.enabled = state;
+      }
+    }
 }
 
 - (void)removeSwipeGestures

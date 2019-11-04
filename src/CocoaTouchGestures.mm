@@ -67,3 +67,19 @@ void addScreenEdgePanGestures( ScreenEdgePanGestureRecognizerInfo *sepanInfo,
     [[windowRef->getNativeViewController() view] addScreenEdgePanGesture:sepanInfo];
 #endif
 }
+
+void addScreenEdgePanAndPanGestures( ScreenEdgePanGestureRecognizerInfo *sepanInfo,
+                                     PanGestureRecognizerInfo *panInfo,
+                                     ci::app::WindowRef windowRef )
+{
+    #ifdef __OBJC__
+        [[windowRef->getNativeViewController() view] addScreenEdgePanAndPanGesture:sepanInfo:panInfo];
+    #endif
+}
+
+void removeAllGestures( ci::app::WindowRef windowRef )
+{
+    #ifdef __OBJC__
+        [[windowRef->getNativeViewController() view] removeAllGestures];
+    #endif
+}
