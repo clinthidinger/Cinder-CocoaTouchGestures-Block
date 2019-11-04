@@ -158,8 +158,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
         [gestureRecognizer setDirection:direction];
         
         [self addGestureRecognizer:gestureRecognizer];
-        
+#if  ! __has_feature(objc_arc)
         [gestureRecognizer release];
+#endif
     }
 }
 
@@ -187,7 +188,7 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     {
         [singleTapRecognizer requireGestureRecognizerToFail : doubleTapRecognizer]; // Allow both gestures to exist.
     }
-    
+#if  ! __has_feature(objc_arc)
     if( singleTapRecognizer != nil )
     {
         [singleTapRecognizer release];
@@ -196,6 +197,7 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     {
         [doubleTapRecognizer release];
     }
+#endif
 }
 
 - (void)addLongPressGesture:(LongPressGestureRecognizerInfo*)longPressInfo
@@ -203,8 +205,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestureRecognizer:)];
     [longPressGestureRecognizer setLongPressInfo:longPressInfo];
     [self addGestureRecognizer:longPressGestureRecognizer];
-    
+#if  ! __has_feature(objc_arc)
     [longPressGestureRecognizer release];
+#endif
 }
 
 
@@ -213,8 +216,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGestureRecognizer:)];
     [pinchGestureRecognizer setPinchInfo:pinchInfo];
     [self addGestureRecognizer:pinchGestureRecognizer];
-    
+#if  ! __has_feature(objc_arc)
     [pinchGestureRecognizer release];
+#endif
 }
 
 - (void)addPanGesture:(PanGestureRecognizerInfo*)panInfo
@@ -223,7 +227,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     [panGestureRecognizer setPanInfo:panInfo];
     [self addGestureRecognizer:panGestureRecognizer];
     
+#if  ! __has_feature(objc_arc)
     [panGestureRecognizer release];
+#endif
 }
 
 - (void)addRotationGesture:(RotationGestureRecognizerInfo*)rotationInfo
@@ -231,8 +237,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     UIRotationGestureRecognizer *rotateGestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotationGestureRecognizer:)];
     [rotateGestureRecognizer setRotationInfo:rotationInfo];
     [self addGestureRecognizer:rotateGestureRecognizer];
-    
+#if  ! __has_feature(objc_arc)
     [rotateGestureRecognizer release];
+#endif
 }
 
 - (void)addScreenEdgePanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo
@@ -241,8 +248,9 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     screenEdgePanGestureRecognizer.edges = UIRectEdgeLeft;
     [screenEdgePanGestureRecognizer setScreenEdgePanInfo:screenEdgePanInfo];
     [self addGestureRecognizer:screenEdgePanGestureRecognizer];
-    
+#if  ! __has_feature(objc_arc)
     [screenEdgePanGestureRecognizer release];
+#endif
 }
 
 - (void)addScreenEdgePanAndPanGesture:(ScreenEdgePanGestureRecognizerInfo*)screenEdgePanInfo:
@@ -259,9 +267,10 @@ static char const * const GESTUREINFOKEY = "GESTUREINFOKEY";
     [self addGestureRecognizer:screenEdgePanGestureRecognizer];
     
     [panGestureRecognizer requireGestureRecognizerToFail : screenEdgePanGestureRecognizer];
-    
+#if  ! __has_feature(objc_arc)
     [screenEdgePanGestureRecognizer release];
     [panGestureRecognizer release];
+#endif
 }
 
 -(void)enableSwipegeGestures:(bool)state
